@@ -1,4 +1,5 @@
+/* eslint-disable radix */
 module.exports = {
-  // eslint-disable-next-line radix
-  expiresIn: parseInt(process.env.SESSION_EXPIRES) || 60 * 60,
+  expiresIn: parseInt(process.env.TOKEN_EXPIRES) || 60 * 60,
+  sessionDuration: parseInt(process.env.SESSION_DURATION) || 30,
 };

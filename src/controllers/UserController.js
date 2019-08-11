@@ -1,5 +1,7 @@
 /* eslint-disable class-methods-use-this */
 const mongoose = require('mongoose');
+const moment = require('moment');
+const { sessionDuration } = require('../config/session');
 const User = require('../models/User');
 
 class UserController {
@@ -29,6 +31,17 @@ class UserController {
     if (user.token !== token) {
       return response.status(401).json({
         message: 'Não autorizado',
+      });
+    }
+
+    // eslint-disable-next-line new-cap
+    const lastLogin = new moment(user.lastLogin);
+    // eslint-disable-next-line new-cap
+    const duration = moment.duration(new moment().diff(lastLogin));
+
+    if (duration.humanize().startsWith(sessionDuration)) {
+      return response.status(401).json({
+        message: 'Sessão inválida',
       });
     }
 

@@ -51,10 +51,7 @@ UserSchema.pre('save', function (next) {
 
 UserSchema.methods = {
   checkPassword(password) {
-    return compareSync(password, this.password, (err, result) => {
-      if (err) { throw (err); }
-      console.log(result);
-    });
+    return compareSync(password, this.password);
   },
 
   generateToken() {
