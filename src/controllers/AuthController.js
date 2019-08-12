@@ -9,7 +9,7 @@ class AuthController {
   ) {
     const { email, password } = request.body;
 
-    let user = await User.authenticate(email);
+    let user = await User.findOne({ email });
 
     if (!user) {
       return response.status(401).json({
@@ -22,6 +22,10 @@ class AuthController {
         message: 'Usuário e/ou senha inválidos',
       });
     }
+
+    user.token = user.generateToken();
+    user.lastLogin = new Date();
+    user.save();
 
     const { token } = user;
 

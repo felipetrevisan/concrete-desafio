@@ -1,7 +1,7 @@
 const { model, Schema } = require('mongoose');
 const jwt = require('jsonwebtoken');
 const { hashSync, compareSync } = require('bcryptjs');
-const expiresIn = require('../config/session');
+const session = require('../config/session');
 
 const UserSchema = new Schema(
   {
@@ -55,24 +55,8 @@ UserSchema.methods = {
   },
 
   generateToken() {
-    return jwt.sign({ id: this.id }, process.env.SECRET, expiresIn);
-  },
-};
-
-UserSchema.statics = {
-  async authenticate(email) {
-    const loggedUser = await this.findOne({ email });
-
-    if (loggedUser) {
-      if (!loggedUser.token) {
-        loggedUser.token = loggedUser.generateToken();
-      }
-
-      loggedUser.lastLogin = new Date();
-      loggedUser.save();
-    }
-
-    return loggedUser;
+    return jwt.sign({ id: this.id }, process.env.SECRET,
+      { expiresIn: session.expiresIn });
   },
 };
 

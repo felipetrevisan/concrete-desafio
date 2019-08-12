@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 const mongoose = require('mongoose');
 const moment = require('moment');
-const { sessionDuration } = require('../config/session');
+const session = require('../config/session');
 const User = require('../models/User');
 
 class UserController {
@@ -39,7 +39,7 @@ class UserController {
     // eslint-disable-next-line new-cap
     const duration = moment.duration(new moment().diff(lastLogin));
 
-    if (duration.humanize().startsWith(sessionDuration)) {
+    if (duration.humanize().startsWith(session.duration)) {
       return response.status(401).json({
         message: 'Sessão inválida',
       });
